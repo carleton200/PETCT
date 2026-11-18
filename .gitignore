@@ -1,0 +1,12 @@
+# Conversation transcripts from the ai-use-log plugin. Submitted as a file, never published.
+ai-log/
+
+# Local Claude Code settings and browser-tool scratch output
+.claude/settings.local.json
+.playwright-mcp/
+
+# Tooling leftovers
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
