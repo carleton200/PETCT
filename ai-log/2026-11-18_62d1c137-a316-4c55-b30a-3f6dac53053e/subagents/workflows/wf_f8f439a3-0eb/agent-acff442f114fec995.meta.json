@@ -1,0 +1,1 @@
+{"agentType":"workflow-subagent","isBuiltIn":true,"description":"verify:ct-physics","workflowPhase":"Verify","spawnDepth":1,"requestShape":"foreground","requestNonInteractive":false,"model":"claude-fable-5-2","pickedEffortModel":"claude-fable-5-2","inWorkflowRun":true}

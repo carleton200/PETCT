@@ -1,0 +1,312 @@
+[ 'batch', 'verifiedOn', 'claims', 'tables' ] 35 [
+  'attenuation',
+  'transmission',
+  'hounsfield',
+  'interactions',
+  'pairSurvival511keV',
+  'tableNotes'
+]
+
+### ct-tube-voltage | Claim 1: CT X-ray tube voltage
+S: A CT scanner runs its X-ray tube at a peak voltage between about 70 and 150 kilovolts, and 120 kilovolts is the usual setting for adult body scans.
+V: 120 [kV (peak tube voltage, also written kVp)] R: 70 to 150 kV depending on scanner model; many scanners offer 80, 100, 120 and 140 kV. The IAEA handbook gives 120 to 140 kV as usual, with 80 to 100 kV for contrast studies and children.
+SRC: https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf , https://www.siemens-healthineers.com/en-us/computed-tomography/dual-source-ct/somatom-force , https://www.siemens-healthineers.com/en-us/molecular-imaging/pet-ct/biograph-vision , https://www.siemens-healthineers.com/en-us/computed-tomography/photon-counting-ct-scanner/naeotom-alpha
+N: Draft confirmed. Read: IAEA Diagnostic Radiology Physics handbook (2014), section 11.6 ("a relatively high tube voltage (120-140 kV) is used ... a relatively low tube voltage, in the range 80-100 kV" for contrast and pediatric scans); the same handbook names 120 kV (beam quality RQT 9) as the standard calibration quality for CT. Siemens SOMATOM Force specification: "70 - 150 kV, in steps of 10 kV". Siemens Biograph Vision PET/CT: tube voltages 70, 80, 100, 120, 140 kV, so the CT inside a PET/CT may top out at 140 kV. Not every scanner offers 70 or 150 kV. "kVp" and "kV" are used interchangeably in the sources. "Usual setting for adult body scans" rests on the IAEA text and on 120 kV being the reference quality; the example PET/CT protocols on the Siemens Biograph Vision page use 80 kV and 100 kV for the CT part.
+
+### ct-beam-energy-spectrum | Claim 1: X-ray beam energy spectrum and effective energy
+S: The beam is a mix of photon energies up to the tube voltage (up to 120 keV at 120 kV), and on average it behaves like a single-energy beam of roughly 55 to 70 keV.
+V: 55 to 70 [keV (effective energy at 120 kV)] R: Measured effective energy at 120 kV, in air at the scanner center: 54.4 and 62.4 keV on two scanners (one study), 54.9 to 58.0 keV on two other scanners (another study). PET/CT papers use about 70 keV for the beam inside the patient.
+SRC: https://pmc.ncbi.nlm.nih.gov/articles/PMC5966206/ , https://pmc.ncbi.nlm.nih.gov/articles/PMC7851788/ , https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=9800714&rettype=abstract&retmode=text , https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=12931319&rettype=abstract&retmode=text , https://jnm.snmjournals.org/content/45/1_suppl/4S.full.pdf
+N: CORRECTED from the draft "about 60 to 70 keV": measured effective energies at 120 kVp are often below 60 keV (54.4 keV and 62.4 keV in PMC5966206; 54.87 to 57.97 keV, mean 56.47, in PMC7851788). The PET/CT literature (Kinahan 1998 abstract: "effective CT photon energy of 70 keV"; Kinahan 2003: "approximately 70 keV"; Townsend 2004: "mean photon energy of 70 keV") uses 70 keV; the average energy rises as the body filters out low-energy photons (beam hardening). "Effective energy" (the single energy with the same half-value layer) and "mean energy" (the average of the spectrum) are different quantities and the sources use them loosely. Kinahan 1998 describes the CT photons as spanning 40 keV through 140 keV. The site tables use 70 keV to match the PET/CT convention; say "about 70 keV" rather than implying it is exact.
+
+### beer-lambert-law | Claim 2: Beer-Lambert law
+S: The number of photons that get straight through a material falls off exponentially with thickness: I = I0 x exp(-mu x d), where I0 is the number going in, d is the thickness and mu is the linear attenuation coefficient of the material.
+V: I = I0 * exp(-mu * x) [] R: Exact only for a narrow beam of a single energy passing through one uniform material; for a path through several tissues the exponent is the sum (integral) of mu along the path.
+SRC: https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf
+N: Draft confirmed. IAEA handbook Eq. 11.1 ("Beer's law": I(x) = I0 e^(-mu x)) and Eq. 11.2 for a path through varying tissue. The handbook notes that the law describes only the primary (unscattered) beam and that a real CT beam has many energies, which is the cause of the beam-hardening artifact. The names Beer's law, Beer-Lambert law and exponential attenuation law are all in use. The statement writes the thickness as d only to avoid "x x" in plain text; the usual symbol is x.
+
+### water-attenuation-70-and-511-kev | Claim 3: attenuation table; water at 70 keV and 511 keV
+S: One centimeter of water removes about 18 percent of 70 keV X-ray photons from the beam (mu about 0.19 per cm) but only about 9 percent of the 511 keV photons used in PET (mu about 0.096 per cm).
+V: mu(water) = 0.1937 per cm at 70 keV by log-log interpolation (0.1929 from NIST XCOM run at exactly 70 keV); 0.09597 per cm at 511 keV [per cm] R: Half-value thickness of water: about 3.6 cm at 70 keV and about 7.2 cm at 511 keV. PET papers quote 0.096 per cm (narrow beam) and about 0.093 per cm as measured on scanners that accept some scattered photons.
+SRC: https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/water.html , https://physics.nist.gov/PhysRefData/XrayMassCoef/tab4.html , https://physics.nist.gov/cgi-bin/Xcom/xcom2?Method=Comp&Output2=Hand , https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=12111133&rettype=abstract&retmode=text , https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=16696474&rettype=abstract&retmode=text , https://jnm.snmjournals.org/content/jnumed/44/11/1855.full.pdf
+N: Draft value 0.096 per cm CONFIRMED. NIST table values for water: 0.2059 (60 keV), 0.1837 (80 keV), 0.09687 (500 keV), 0.08956 (600 keV) cm2/g. Log-log interpolation gives 0.1937 cm2/g at 70 keV and 0.09597 cm2/g at 511 keV; NIST XCOM run at exactly those energies gives 0.1929 and 0.09598 cm2/g. Independent PET sources: Burger et al. 2002 (Eur J Nucl Med Mol Imaging 29:922-7, PMID 12111133) abstract: "the narrow-beam attenuation coefficient of water at 511 keV (0.096 cm-1)", and they measured 0.093 cm-1 from germanium-68 transmission scans; Carney et al. 2006 (Med Phys 33:976-83, PMID 16696474) use 9.6e-5 x (HU+1000), i.e. 0.096 per cm at 0 HU; Bai et al. 2003 (J Nucl Med 44:1855-61) use 0.096 cm-1 for soft tissue. PubMed abstracts were read through the NCBI E-utilities URLs listed, because pubmed.ncbi.nlm.nih.gov returned a bot check to curl. "Removes from the beam" means absorbed or scattered.
+
+### attenuation-table-materials | Claim 3: attenuation table for seven materials
+S: At CT energies, one centimeter of dense bone removes about 39 percent of the X-ray photons from the beam, water or muscle about 18 percent, fat about 16 percent, air-filled lung about 5 percent, and air almost none.
+V: mu at 70 keV (per cm): air 0.0002118; lung 0.05013; adipose 0.1785; water 0.1937; soft 0.204; muscle 0.202; bone 0.5023. mu at 511 keV (per cm): air 0.000104; lung 0.02475; adipose 0.09125; water 0.09597; soft 0.1008; muscle 0.09984; bone 0.1716 [per cm] R: See tables.attenuation. Body tissues vary from person to person; lung varies most with breathing, and bone ranges from spongy to compact.
+SRC: https://physics.nist.gov/PhysRefData/XrayMassCoef/tab4.html , https://physics.nist.gov/PhysRefData/XrayMassCoef/tab2.html , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/air.html , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/lung.html , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/adipose.html , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/water.html , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/tissue.html , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/muscle.html , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/bone.html , https://physics.nist.gov/cgi-bin/Xcom/xcom2?Method=Mix&Output2=Hand
+N: Mass attenuation coefficients at 60, 80, 500 and 600 keV were read from the NIST pages and densities from NIST Table 2 (air 1.205E-03, adipose 0.950, water 1.000, soft tissue ICRU-44 1.060, skeletal muscle 1.050, cortical bone 1.920, lung tissue 1.050 g/cm3). mu at 70 and 511 keV by log-log interpolation as the task specified. CHECK: NIST XCOM run directly at 70 keV with the same compositions gives slightly lower values, because the curve between 60 and 80 keV is not a straight line on log-log axes: water 0.1929 vs 0.1937 cm2/g (0.4% lower), soft tissue 0.1916 vs 0.1924, fat 0.1875 vs 0.1879, cortical bone 0.2570 vs 0.2616 (1.8% lower). The XCOM values are in the table as xcom_* columns and are the better numbers if the site shows more than two significant figures; at 511 keV the two methods agree to 4 figures. DOUBT: the inflated-lung row uses the NIST lung-tissue mu/rho (tabulated for solid lung tissue, 1.05 g/cm3) at an assumed density of 0.26 g/cm3, as the task instructed. 0.26 g/cm3 is the inflated-lung value usually attributed to ICRU Report 44, but I could not open a primary source that states it; the site should say "inflated lung, assumed density 0.26 g/cm3". The computed HU for that row (-742) sits inside the IAEA lung range (-950 to -600). typicalHU ranges come from the claim 5 sources, not from NIST. computedHU_monoenergetic shows what a single-energy beam would give; real scanners differ (for example the computed fat value at 70 keV, -79 HU, is less negative than the -100 to -115 HU usually measured).
+
+### bone-vs-water-attenuation-ratio | Claim 3: attenuation table; bone compared with water at the two energies
+S: Dense bone attenuates 70 keV X-rays about 2.6 times as strongly as water, but 511 keV PET photons only about 1.8 times as strongly.
+V: mu(bone)/mu(water) = 2.59 at 70 keV (2.56 with XCOM values); 1.79 at 511 keV [ratio] R: For ICRU-44 cortical bone at 1.92 g/cm3; less for spongy bone.
+SRC: https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/bone.html , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/water.html , https://physics.nist.gov/cgi-bin/Xcom/xcom2?Method=Mix&Output2=Hand , https://jnm.snmjournals.org/content/45/1_suppl/4S.full.pdf
+N: Computed: bone 0.5023 per cm and water 0.1937 per cm at 70 keV; bone 0.1716 and water 0.09597 at 511 keV. This energy dependence is the reason one scale factor cannot convert a CT image to 511 keV: the ratio mu(511)/mu(70) is 0.498 for water and 0.348 for cortical bone (XCOM values). Townsend et al. 2004 state the same point in words: "Scale factors for bone are smaller than those for soft tissue".
+
+### transmission-through-water-70-kev | Claim 4: percentage of 70 keV photons passing straight through
+S: Of 100 X-ray photons at 70 keV aimed into water, about 82 pass straight through 1 cm, 38 through 5 cm, 14 through 10 cm and only 2 through 20 cm.
+V: 1 cm: 82.39%; 5 cm: 37.97%; 10 cm: 14.4%; 20 cm: 2.08% [percent] R: Muscle and other soft tissue are within about 2 percentage points of water. See tables.transmission for all seven materials.
+SRC: https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/water.html , https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf
+N: Calculation: percent = 100 x exp(-mu x thickness) with mu = 0.1937 per cm. 1 cm: 100 x exp(-0.1937) = 82.39. 5 cm: 37.97. 10 cm: 14.4. 20 cm: 2.08. With the XCOM value (0.1929 per cm) the results are 82.46 / 38.12 / 14.5 / 2.11 percent: the same after rounding for 1, 5 and 20 cm, and 14.5 rather than 14.4 for 10 cm, so "about 14" (or "about one in seven") is the safe wording for 10 cm. "Straight through" means not absorbed and not scattered, for an ideal narrow single-energy beam; a real CT beam has a spread of energies and its average energy rises with depth, so real transmission through thick bodies is somewhat higher than these numbers. The script is scripts/build_draft.js in the batch scratch folder.
+
+### transmission-through-bone-and-lung-70-kev | Claim 4: percentage of 70 keV photons passing straight through
+S: About 61 percent of 70 keV photons pass straight through 1 cm of dense bone and about 8 percent through 5 cm, while about 61 percent pass through 10 cm of air-filled lung.
+V: bone: 60.51 / 8.113 / 0.658 / 0.00433 %; inflated lung: 95.11 / 77.83 / 60.6 / 36.7 %; fat: 83.65 / 40.97 / 16.8 / 2.82 %; muscle: 81.71 / 36.41 / 13.3 / 1.76 %; soft tissue: 81.55 / 36.07 / 13 / 1.69 %; air: 99.98 / 99.89 / 99.8 / 99.6 % (for 1 / 5 / 10 / 20 cm) [percent] R: Bone values are for compact (cortical) bone; no part of the body has 10 or 20 cm of solid cortical bone, so those two entries are illustrative only. Lung depends on how full of air it is.
+SRC: https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/bone.html , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/lung.html , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/adipose.html , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/muscle.html , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/tissue.html , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/air.html
+N: Calculation as for water, with mu from tables.attenuation (bone 0.5023, lung 0.05013, fat 0.1785, muscle 0.202, soft tissue 0.204, air 0.0002118 per cm). CAUTION on thick bone: small differences in mu are magnified by the exponential. With the XCOM mu for bone (0.4934 per cm) the results are 61.05 / 8.482 / 0.719 / 0.00518 percent, so for 10 cm say "less than 1 percent" and for 20 cm say "less than 0.01 percent" rather than quoting digits.
+
+### hounsfield-unit-definition | Claim 5: Hounsfield unit definition
+S: CT images are stored in Hounsfield units, which compare each tissue with water: HU = 1000 x (mu - mu_water) / mu_water, so 1 HU is a 0.1 percent difference from water.
+V: HU = 1000 * (mu - mu_water) / mu_water [HU] R: Some texts write the denominator as (mu_water - mu_air), which fixes air at exactly -1000; because air attenuates about 910 times less than water, the two forms differ by about 1 HU at the air end and not at all at water.
+SRC: https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf , https://www.nobelprize.org/uploads/2018/06/hounsfield-lecture.pdf
+N: The draft formula, with (mu_water - mu_air) in the denominator, is an accepted variant, but the form with mu_water alone is the one given by the IAEA handbook (Eq. 11.4), which then states HU(air) = -1000 by taking mu_air = 0. With the NIST values at 70 keV the IAEA form gives air = -998.91 HU, so "air is -1000" is a rounded convention under that form and exact under the two-point form; mu_water/mu_air at 70 keV = 914. The scale is named for Godfrey Hounsfield; in his 1979 Nobel lecture he describes the scale running "from air (-1000) at the bottom of the scale, to bone at the top", with water "chosen to be zero".
+
+### hounsfield-air-and-water | Claim 5: Hounsfield units, fixed points
+S: On the Hounsfield scale water is 0 and air is -1000.
+V: water 0; air -1000 [HU] R: Fixed by definition and by scanner calibration; all other tissues shift a little with tube voltage, scanner model and reconstruction settings.
+SRC: https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf , https://www.nobelprize.org/uploads/2018/06/hounsfield-lecture.pdf
+N: Draft confirmed. IAEA handbook section 11.2.2 and Table 11.1; Hounsfield Nobel lecture ("air (-1000) ... water, which has been chosen to be zero"). The IAEA handbook notes that a 12-bit CT image covers -1024 to +3071 HU.
+
+### hounsfield-lung | Claim 5: Hounsfield units, lung
+S: Air-filled lung measures about -950 to -600 HU, because it is mostly air.
+V: -750 [HU] R: -950 to -600 (IAEA); more negative at full breath-in, less negative at breath-out or where the lung is diseased or collapsed
+SRC: https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/lung.html
+N: Draft range (-900 to -500) replaced with the IAEA handbook Table 11.1 entry: Lung -750 (-950 to -600). The computed value for lung tissue at 0.26 g/cm3 and 70 keV is -742 HU, consistent with the table. The draft upper end of -500 is plausible for lung at breath-out but I did not find it in a source I could read.
+
+### hounsfield-fat | Claim 5: Hounsfield units, fat
+S: Fat measures about -100 HU, slightly below water, typically between -130 and -70 HU.
+V: -100 [HU] R: -130 to -70. IAEA: -90 (-100 to -80). Measured in 48 adults on two scanners: mean -103 to -113, individual values -130 to -79.
+SRC: https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf , https://pmc.ncbi.nlm.nih.gov/articles/PMC5015439/ , https://pmc.ncbi.nlm.nih.gov/articles/PMC6160654/
+N: Draft range (-120 to -60) adjusted: no source read supports values as high as -60 for pure fat. IAEA Table 11.1: Fat -90 (-100 to -80). Lamba et al. 2014 (AJR 203:1013-20), Table 2: subcutaneous fat means -102.9 to -113.4 HU, minimum -129.9, maximum -78.9. A 2018 paper quoting Hounsfield (1980) gives adipose -90 to -70. The same person measured on two scanners differed by about 10 HU in fat.
+
+### hounsfield-blood | Claim 5: Hounsfield units, blood
+S: Blood without contrast agent measures roughly +30 to +60 HU, a little above water.
+V: +40 to +55 [HU] R: +30 to +60; lower in anemia (measured down to +20), higher when clotted
+SRC: https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf , https://pmc.ncbi.nlm.nih.gov/articles/PMC9816921/ , https://pmc.ncbi.nlm.nih.gov/articles/PMC12426566/
+N: Draft range (+30 to +45) WIDENED because sources disagree. IAEA Table 11.1: Blood +55 (+50 to +60). Measured in the aorta on unenhanced CT: mean +37.7 HU, range +20 to +51, in 423 patients of whom about a third were anemic (PMC9816921); about +45 HU in non-anemic and +33 to +36 HU in anemic patients (PMC12426566). The two clinical studies are single-center studies published in Cureus (2022 and 2025); treat the numbers as typical, not exact. "Higher when clotted" is standard radiology teaching that I did not confirm in a source read for this batch; drop it if unsure.
+
+### hounsfield-muscle | Claim 5: Hounsfield units, muscle
+S: Muscle measures roughly +10 to +65 HU, most often about +40 to +50 HU.
+V: +45 [HU] R: +10 to +65. IAEA: +25 (+10 to +40). Measured psoas muscle in 47 adults on two scanners: mean +44 to +49, individual values +22 to +67.
+SRC: https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf , https://pmc.ncbi.nlm.nih.gov/articles/PMC5015439/ , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/muscle.html
+N: Draft range (+35 to +55) widened because sources disagree. IAEA Table 11.1: Muscle +25 (+10 to +40). Lamba et al. 2014 Table 2: right and left psoas means 44.4, 44.0, 47.7, 49.4 HU; minimum 21.9, maximum 66.6. Computed for ICRU-44 skeletal muscle at 70 keV: +43 HU. Fat within a muscle lowers its value.
+
+### hounsfield-liver | Claim 5: Hounsfield units, liver
+S: A healthy liver measures about +45 to +70 HU without contrast agent, and fat in the liver lowers the number.
+V: +55 [HU] R: +45 to +70. IAEA: +60 (+50 to +70). Measured in 45 adult patients on two scanners: mean +47.5 and +50.4.
+SRC: https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf , https://pmc.ncbi.nlm.nih.gov/articles/PMC5015439/
+N: Draft range (+40 to +60) shifted slightly upward to match the sources read. IAEA Table 11.1: Liver +60 (+50 to +70). Lamba et al. 2014 Table 2: right lobe mean 47.5 HU (Siemens) and 50.4 HU (GE), individual values 9.6 to 77.2 HU in hospital patients not screened for fatty liver, which pulls the mean down. The lower end of +45 is my judgment between the two sources.
+
+### hounsfield-spongy-bone | Claim 5: Hounsfield units, spongy (cancellous) bone
+S: Spongy bone, such as the inside of a vertebra, varies widely with age and bone health, from under +100 HU to +300 HU or more.
+V: +100 to +300 [HU] R: In a study of 1867 adults, a first-lumbar-vertebra reading of 160 HU or less suggested osteoporosis and readings above 200 HU made it very unlikely; individual readings as low as 20 HU were shown.
+SRC: https://pmc.ncbi.nlm.nih.gov/articles/PMC3736840/ , https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf
+N: CORRECTED: the draft range "+300 to +400" is widely repeated on the web but I found no primary source for it, and measured vertebral spongy bone is usually lower. Pickhardt et al. 2013 (Ann Intern Med; PMC3736840): L1 trabecular attenuation of 160 HU or less was 90% sensitive, and 110 HU more than 90% specific, for osteoporosis; negative predictive value 99% above 200 HU; example patients at 20, 93 and 148 HU. Spongy bone in young adults and at other sites can be denser; the IAEA table gives only "compact bone", starting at +300. The "+300 HU or more" upper end is my inference from those two facts, not a quoted number. Recommend the site avoid a single narrow range for spongy bone.
+
+### hounsfield-cortical-bone | Claim 5: Hounsfield units, compact (cortical) bone
+S: Dense compact bone measures from several hundred HU to +2000 HU or more, typically around +1000 to +1500 HU.
+V: +1000 [HU] R: +300 to +2500 (IAEA). Depends strongly on tube voltage: computed for reference cortical bone, +1331 at 80 keV, +1595 at 70 keV and +1938 at 60 keV.
+SRC: https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf , https://pmc.ncbi.nlm.nih.gov/articles/PMC8693332/ , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/bone.html
+N: Draft (+500 up to about +1900 or more) is consistent with the sources; range replaced with the IAEA handbook Table 11.1 entry: Compact bone +1000 (+300 to +2500). A 2022 phantom paper (Dentomaxillofac Radiol 51:20200323) lists skull bone at about 1500 HU at 120 kV on a GE Revolution scanner. The IAEA handbook notes that HU of high-atomic-number materials such as bone change most with tube voltage.
+
+### ct-gantry-rotation-time | Claim 6: gantry rotation speed
+S: Inside the ring, the X-ray tube and the detector opposite it spin around the patient about two to four times every second.
+V: 0.25 to 0.5 [s per rotation] R: Fastest current models: 0.23 s (GE Revolution Apex), 0.24 s (Canon Aquilion ONE INSIGHT Edition, optional), 0.25 s (Siemens SOMATOM Force). The CT inside a Siemens Biograph Vision PET/CT: 0.33 s, with 0.30 and 0.28 s optional. Slower settings of 0.5 to 1 s are also used.
+SRC: https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf , https://www.siemens-healthineers.com/en-us/computed-tomography/dual-source-ct/somatom-force , https://www.gehealthcare.com/en-us/about/newsroom/press-releases/ge-healthcare-introduces-modular-scalable-ct-platform-to-minimize-technology-obsolescence , https://www.accessdata.fda.gov/cdrh_docs/pdf21/K213715.pdf , https://us.medical.canon/products/computed-tomography/aquilion-one-insight/ , https://www.siemens-healthineers.com/en-us/molecular-imaging/pet-ct/biograph-vision
+N: Draft confirmed with detail added. 0.5 s = 2 turns per second; 0.33 s = 3; 0.25 s = 4; 0.23 s = 4.35. IAEA handbook: multi-detector scanners brought rotation time to 0.3-0.4 s, and "Forces of several tens of g arise for rotation times of the order of 0.25 s". Manufacturer pages read 2026-11-18; the GE press release calls 0.23 s "the world's fastest gantry speed", a marketing claim the site should not repeat as fact. The FDA 510(k) summary K213715 confirms the 0.23 s/rotation option. The fastest speeds are options used mainly for heart scans; a PET/CT body scan does not need them. "Slower settings of 0.5 to 1 s" is from the Townsend 2004 table (0.4 to 2.0 s on the PET/CT scanners of that year) and general practice, not from a current specification sheet.
+
+### ct-detector-rows | Claim 6: number of detector rows
+S: Instead of one row of detector elements, a modern CT scanner has many rows side by side, commonly 64 and up to 320, so each turn records a band of the body rather than a single thin slice.
+V: 64 [detector rows (common); up to 320] R: 4 to 64 rows in the multi-detector scanners introduced from 1998; up to 320 rows of 0.5 mm, covering 16 cm per turn, on wide-detector scanners. The CT inside a Siemens Biograph Vision PET/CT is sold as 64- or 128-slice.
+SRC: https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf , https://us.medical.canon/products/computed-tomography/aquilion-one-insight/ , https://www.siemens-healthineers.com/en-us/molecular-imaging/pet-ct/biograph-vision , https://jnm.snmjournals.org/content/45/1_suppl/4S.full.pdf
+N: Draft ("64 to 320 detector rows") reworded: 64 to 320 is the range for current high-end stand-alone CT, but "slices" in product names is not always the number of physical rows, and PET/CT scanners have been built with 1, 2, 4, 8, 16, 64 and 128-slice CT (Townsend 2004 Table 2 lists 1 to 16 slices for the PET/CT designs of that year). IAEA handbook Table 11.2 and section 11.3.5: MDCT from 1998 with 4-64 active rows; volumetric CT from 2007 "with up to 320 active channels"; "With the 320 detector row CT scanner, one single rotation allows for coverage of 160 mm". Canon page: "320 rows, 0.5 mm", "16 cm z-axis". Each row has roughly 800 to 1000 detector elements along the arc (IAEA). "Commonly 64" is my reading of the IAEA text and the product pages, not a market statistic.
+
+### ct-slice-thickness | Claim 6: thinnest slices
+S: The thinnest slices on most current scanners are about 0.5 to 0.625 mm, and the newest photon-counting scanners reach 0.2 mm.
+V: 0.5 to 0.625 [mm] R: 0.5 mm (Canon), 0.6 mm (Siemens), 0.625 mm (GE); 0.2 mm on the Siemens NAEOTOM Alpha photon-counting scanner. Whole-body PET/CT images are usually reconstructed much thicker.
+SRC: https://us.medical.canon/products/computed-tomography/aquilion-one-insight/ , https://www.siemens-healthineers.com/en-us/molecular-imaging/pet-ct/biograph-vision , https://pmc.ncbi.nlm.nih.gov/articles/PMC8693332/ , https://www.siemens-healthineers.com/en-us/computed-tomography/photon-counting-ct-scanner/naeotom-alpha , https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf , https://jnm.snmjournals.org/content/45/1_suppl/4S.full.pdf
+N: Draft confirmed; 0.2 mm figure added. Canon Aquilion ONE INSIGHT page: 320 rows, 0.5 mm. Siemens Biograph Vision page: example protocols with 128 x 0.6 mm and 32 x 1.2 mm collimation. A GE Revolution scan with 0.625 mm slice thickness is described in PMC8693332. Siemens NAEOTOM Alpha page: "slice thickness of 0.2 mm", z-coverage 144 x 0.4 mm or 120 x 0.2 mm. IAEA: slice thickness "well below 1 mm" for MDCT. The example PET/CT scan in Townsend 2004 used 5 mm CT slices.
+
+### ct-whole-body-scan-time | Claim 6: time for a whole-body CT pass
+S: The CT part of a PET/CT exam, which usually covers the body from the head or neck to the thighs, takes well under a minute.
+V: 13 [s to cover 100 cm on a 16-slice PET/CT (2004 figure)] R: 13 s (16-slice) to 90 s (single-slice) per 100 cm on the PET/CT scanners of 2004; faster on current scanners. The PET part takes far longer, typically many minutes.
+SRC: https://jnm.snmjournals.org/content/45/1_suppl/4S.full.pdf , https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf , https://www.siemens-healthineers.com/en-us/computed-tomography/dual-source-ct/somatom-force
+N: Draft confirmed. Townsend et al. 2004 (J Nucl Med 45 suppl 1:4S-14S): "The time to scan an axial range of 100 cm varies from 13 s for a 16-slice system up to 90 s for a single-slice unit." IAEA handbook: MDCT makes it "possible to scan almost the entire body of an adult within one breath hold". Worked example (my arithmetic, not from a source): a 64 x 0.6 mm detector (38.4 mm) at pitch 1 and 0.5 s per turn moves 76.8 mm/s and covers 100 cm in 13 s. Siemens quotes up to 737 mm/s for its fastest stand-alone scanner. The scan range "head or neck to the thighs" is the usual oncology range and should be checked against the PET/CT protocol batch; the same paper gives PET times of 1 to 5 min per bed position.
+
+### why-bone-stops-more-x-rays | Claim 7: why bone stops more X-rays
+S: Bone stops more X-rays than soft tissue for two reasons: it is nearly twice as dense, and about a third of its weight is calcium and phosphorus, heavier atoms that absorb X-ray photons outright far more readily than the hydrogen, carbon and oxygen of soft tissue.
+V: cortical bone: density 1.92 g/cm3; calcium 22.5% and phosphorus 10.3% by weight [] R: At 70 keV about 30 percent of photon interactions in cortical bone are photoelectric absorption, compared with about 4.7 percent in water; per centimeter, photoelectric absorption is about 17 times more likely in bone than in water.
+SRC: https://physics.nist.gov/PhysRefData/XrayMassCoef/tab2.html , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/bone.html , https://physics.nist.gov/cgi-bin/Xcom/xcom2?Method=Mix&Output2=Hand , https://physics.nist.gov/cgi-bin/Xcom/xcom2?Method=Comp&Output2=Hand , https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf
+N: Draft confirmed and quantified. NIST Table 2 composition of cortical bone (ICRU-44): Ca 0.225, P 0.103, O 0.435, C 0.155, N 0.042, H 0.034 by weight; density 1.92 g/cm3. NIST XCOM at 70 keV: bone photoelectric 0.07729, incoherent (Compton) 0.1582, coherent (Rayleigh) 0.02157 cm2/g; water photoelectric 0.008969, incoherent 0.1734, coherent 0.01048 cm2/g. Shares: bone 30% photoelectric / 62% Compton / 8.4% Rayleigh; water 4.7% / 90% / 5.4%. Photoelectric absorption per gram is 8.6 times higher in bone, per cm 16.5 times. NOTE: even in bone at 70 keV, Compton scattering is still the most common single interaction (62%); photoelectric absorption becomes the larger share only below roughly 55 keV (in the NIST XCOM data it is larger than Compton at 50 keV but not at 60 keV). So say photoelectric absorption is "far more likely in bone than in soft tissue", not that it is the main interaction in bone at 70 keV. IAEA handbook: the photoelectric cross-section rises steeply with atomic number and falls steeply with energy; "the scatter interactions are predominant for soft tissue, but the photoelectric interaction is predominant for bone over much of the diagnostic energy range".
+
+### soft-tissue-mostly-scatters | Claim 7: soft tissue behaves like water and mostly scatters
+S: Soft tissues are mostly water, differ from water by less than 10 percent in how strongly they attenuate X-rays, and at CT energies about nine out of ten of their interactions with X-ray photons are Compton scattering.
+V: 90 [percent of interactions in water at 70 keV that are Compton scattering] R: Water at 70 keV: about 90% Compton scatter, 5.4% Rayleigh scatter, 4.7% photoelectric absorption. Muscle and soft tissue are about 4.3 to 5.3% above water in mu; fat is about 7.9% below.
+SRC: https://physics.nist.gov/cgi-bin/Xcom/xcom2?Method=Comp&Output2=Hand , https://physics.nist.gov/cgi-bin/Xcom/xcom2?Method=Mix&Output2=Hand , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/tissue.html , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/muscle.html , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/adipose.html , https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf
+N: Draft confirmed and quantified from NIST XCOM (see tables.interactions). mu at 70 keV: water 0.1937, muscle 0.202, soft tissue 0.204, fat 0.1785 per cm. This small spread (under 10 percent, that is a few tens of HU) is the reason CT needs precise measurements to tell soft tissues apart. At 511 keV more than 99 percent of interactions in water, soft tissue and bone are Compton scattering.
+
+### three-fates-of-an-x-ray-photon | Claim 8: what can happen to one X-ray photon in the body
+S: Each X-ray photon entering the body does one of three things: it passes straight through and reaches the detector, it is absorbed by an atom and disappears (the photoelectric effect), or it bounces off an electron in a new direction (scattering).
+V: three outcomes: transmitted, absorbed, scattered [] R: Two kinds of scattering occur at CT energies: Compton scattering (the photon gives part of its energy to an electron; about 90% of interactions in water at 70 keV) and Rayleigh scattering (the photon changes direction and keeps its energy; about 5.4%). A scattered photon can go on to scatter again, be absorbed, or leave the body.
+SRC: https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf , https://physics.nist.gov/cgi-bin/Xcom/xcom2?Method=Comp&Output2=Hand
+N: Draft confirmed; Rayleigh (coherent) scattering added as a minor second kind of scatter so the site does not imply Compton is the only one. IAEA handbook chapter 2: photoelectric effect ("The incident photon disappears in the photoelectric interaction"), coherent (Rayleigh) scattering, Compton scattering; a scattered photon may "be followed by a third scatter, photoelectric absorption or no further interactions". Pair production needs at least 1022 keV, so it plays no part in CT or PET. The image is formed from the photons that pass straight through; scattered photons that still reach the detector add haze, which the anti-scatter grid on the detector reduces. "Bounces off an electron" is a simplification that fits Compton scattering; Rayleigh scattering involves the atom as a whole.
+
+### photons-do-not-slow-down | Claim 8: attenuation means fewer photons, not slower ones
+S: X-ray photons do not slow down in the body; they all travel at the speed of light, and tissue only reduces how many of them arrive, which is what attenuation means.
+V: speed unchanged; number reduced [] R: A Compton-scattered photon does lose energy, but it still travels at the speed of light: a 70 keV photon scattered through 90 degrees leaves with about 61.6 keV, and a 511 keV photon with about 256 keV.
+SRC: https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf
+N: Draft confirmed. The Beer-Lambert law (IAEA Eq. 11.1) is a statement about the number (intensity) of unscattered photons. Lower photon energy means longer wavelength, not lower speed. The speed statement is standard physics rather than a sentence quoted from the handbook; for X-rays the refractive index of tissue differs from 1 by a few parts per million or less, so "at the speed of light" is accurate for the site. Compton energies computed from E_after = E / (1 + (E / 511 keV) x (1 - cos angle)): 70 keV gives 61.6 keV at 90 degrees and 54.9 keV at 180 degrees; 511 keV gives 256 keV and 170 keV. GAME NOTE: if the site game shows photons slowing down in dense tissue, it should say plainly that this is a visual stand-in for "fewer photons get through", and that real photons never slow.
+
+### radon-transform | Claim 9: image reconstruction, the Radon transform
+S: The mathematics behind CT goes back to 1917, when the mathematician Johann Radon showed that a two-dimensional pattern can be recovered from the sums measured along all the straight lines crossing it; the set of those line sums is now called the Radon transform.
+V: 1917 [year] R: Radon's paper was not known to the people who built CT: Allan Cormack solved the problem independently, published in 1963 and 1964, and wrote that he learned of Radon's work only in the early 1970s.
+SRC: https://www.nobelprize.org/uploads/2018/06/cormack-lecture.pdf , https://www.nobelprize.org/prizes/medicine/1979/press-release/ , https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf
+N: Draft confirmed. Cormack Nobel lecture (1979): "Only then [the early seventies] did I learn of Radon's work on the line integral problem", reference 3: Radon, J., Ber. Sachs. Akad. Wiss. 69, 262 (1917); "Radon provided an affirmative answer and a formula". Nobel press release 1979: Cormack "published his analysis of the problem in two scientific publications in 1963 and 1964" and "was not aware then that the key mathematical problems had been considered earlier". IAEA handbook section 11.4.2 uses "Radon space" and "2-D Radon transform" for CT projection data. Radon's first name and nationality (Johann, Austrian) are from general knowledge; the lecture gives only "Radon, J. H.", so the name should be checked by the history batch and the nationality is left out. The range text says "not known to the people who built CT", which is supported for Cormack; Hounsfield's lecture does not mention Radon.
+
+### filtered-back-projection | Claim 9: image reconstruction, filtered back-projection
+S: For about four decades the standard way to turn the measurements into a picture was filtered back-projection: each measured profile is sharpened with a "ramp" filter and then smeared back across the image along the direction it was measured from, and the smears from all angles add up to the cross-section.
+V: about 40 [years as the standard method] R: Without the filter step, simple back-projection gives a strongly blurred image. The ramp filter is also called the Ram-Lak (Ramachandran-Lakshminarayanan) filter; scanners offer modified versions tuned for soft tissue or bone.
+SRC: https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf , https://pmc.ncbi.nlm.nih.gov/articles/PMC9968777/ , https://pmc.ncbi.nlm.nih.gov/articles/PMC6443602/
+N: Draft confirmed. Koetzier et al. 2023 (Radiology 306:e221257): "Filtered back projection (FBP) has been the standard CT image reconstruction method for 4 decades." Willemink and Noel 2019 (Eur Radiol 29:2185-95): "FBP was the method of choice for decades". IAEA handbook section 11.4: simple back-projection "yields a strongly blurred image"; the filter is "a ramp filter in the frequency domain ... Ramachandran-Lakshminarayanan filter, also called the Ram-Lak or ramp filter". "Sharpened" is plain-language for a filter that boosts fine detail (high spatial frequencies).
+
+### first-ct-used-iterative-reconstruction | Claim 9: image reconstruction, history
+S: The first CT scanners of the early 1970s built their images with a step-by-step (iterative) method, but the computers of the time were too slow for it and filtered back-projection soon replaced it.
+V: early 1970s [] R: The first clinical scan took about 5 minutes to acquire and about as long to reconstruct, at 80 x 80 pixels; most CT images today are 512 x 512 pixels.
+SRC: https://pmc.ncbi.nlm.nih.gov/articles/PMC6443602/
+N: ADDED nuance: the draft says FBP "was the standard method for decades", which is true, but it was not the original method. Willemink and Noel 2019: "The first CT scanners in the early 1970s already used iterative reconstruction algorithms"; "Originally, CT images were reconstructed with an iterative method called algebraic reconstruction technique (ART). Due to lack of computational power, this technique was quickly replaced by simple analytic methods such as filtered back projection"; "The first clinical CT scan took about 5 min, and image reconstruction took approximately the same time ... only 80 x 80 pixels"; "512 x 512 pixels for most clinical applications". Scan and reconstruction times for the first scanner differ between accounts; the history batch should own those numbers.
+
+### iterative-reconstruction-return | Claim 9: image reconstruction, iterative methods
+S: Since about 2009, faster computers have let scanner makers bring back iterative reconstruction, which repeatedly adjusts the image until it agrees with the measurements and gives cleaner pictures at lower radiation dose; it is now common.
+V: 2009 [year (approximate start of routine clinical use)] R: Within a few years of 2009 all major CT makers offered iterative reconstruction. Types range from "hybrid" methods that mainly reduce noise to full model-based methods.
+SRC: https://pmc.ncbi.nlm.nih.gov/articles/PMC6443602/ , https://www-pub.iaea.org/MTCD/Publications/PDF/Pub1564webNew-74666420.pdf , https://pmc.ncbi.nlm.nih.gov/articles/PMC9968777/
+N: Draft confirmed. Willemink and Noel 2019: "it took until 2009 for the first iterative reconstruction algorithms to come commercially available"; "In 2009, the first IR algorithm called IRIS (iterative reconstruction in image space, Siemens Healthineers) received FDA clearance"; "Within a few years, all major CT vendors introduced IR algorithms". DOUBT on the "first": other accounts date GE's ASiR to 2008, which I did not verify; the statement therefore says "since about 2009" and names no first product. IAEA handbook (2014): "Iterative (statistical) reconstructions are now commonly used in CT."
+
+### deep-learning-reconstruction | Claim 9: image reconstruction, deep learning
+S: The newest method, deep-learning reconstruction, uses a neural network trained on pairs of lower-quality and higher-quality scans to produce low-noise images; the first such products for CT were cleared by the U.S. Food and Drug Administration in 2019.
+V: 2019 [year of first FDA clearances] R: By early 2023, three CT makers (GE, Canon, Philips) and two independent software companies had FDA-cleared deep-learning products.
+SRC: https://pmc.ncbi.nlm.nih.gov/articles/PMC9968777/
+N: Draft confirmed and dated. Koetzier et al. 2023: "In 2019, TrueFidelity (GE Healthcare) became the first DLR technique approved by the FDA"; "The second DLR algorithm approved by the FDA was ... AiCE, Canon Medical Systems ... in 2019"; Philips Precise Image in 2022; two image-denoising products (ClariCT.AI, PixelShine) cleared in 2019. The statement says "the first such products ... in 2019", which is true whichever product is counted first. The review writes "approved"; the regulatory term for these devices is "cleared". The review abstract, as returned by search, also reports dose reductions of up to 71 percent in selected studies; I did not check that figure in the full text, so it is left out of the statement.
+
+### ct-based-attenuation-correction | Claim 10: CT-based attenuation correction in PET/CT
+S: In a PET/CT scanner the CT image does a second job: it is converted into a map of how strongly each part of the body attenuates 511 keV photons, and that map is used to correct the PET data for the photon pairs that were absorbed or scattered inside the patient.
+V: attenuation correction [] R: Before PET/CT, the map came from a separate, lengthy transmission scan with radioactive sources; replacing it with CT cut whole-body scan time by up to 40 percent and gave a nearly noise-free map.
+SRC: https://jnm.snmjournals.org/content/45/1_suppl/4S.full.pdf , https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=12931319&rettype=abstract&retmode=text , https://tech.snmjournals.org/content/33/3/156 , https://pmc.ncbi.nlm.nih.gov/articles/PMC4315529/
+N: Draft confirmed. Townsend et al. 2004: "the use of CT images for attenuation correction of the PET emission data, eliminating the need for a separate, lengthy PET transmission scan ... not only reduces whole-body scan times by up to 40% but also provides essentially noiseless ACFs". Kinahan et al. 2003 (Semin Nucl Med 33:166-79) abstract: transmission methods use "positron sources, gamma-ray sources, or x-ray sources"; error sources for the CT method are breathing mismatch between CT and PET, contrast agents, metal implants, and arms in the field of view. The EANM FDG PET/CT guideline (Boellaard 2015) recommends looking at images with and without attenuation correction to spot CT-caused artifacts.
+
+### ct-to-511-kev-conversion | Claim 10: converting CT numbers to 511 keV attenuation
+S: Because CT measures attenuation at about 70 keV and PET needs it at 511 keV, the scanner rescales every pixel, using one straight-line conversion for air, lung and soft tissue and a second, less steep line for bone.
+V: mu(511 keV) = 9.6e-5 x (HU + 1000) per cm below about 50 HU [per cm] R: This two-line ("bilinear") conversion gives 0.096 per cm for water (0 HU) and 0 for air (-1000 HU). Above the break point the slope is smaller and depends on the CT tube voltage. The ratio mu(511 keV)/mu(70 keV) is about 0.5 for water and about 0.35 for dense bone.
+SRC: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=16696474&rettype=abstract&retmode=text , https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=12111133&rettype=abstract&retmode=text , https://jnm.snmjournals.org/content/45/1_suppl/4S.full.pdf , https://tech.snmjournals.org/content/33/3/156 , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/water.html , https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/bone.html
+N: Draft confirmed with one correction of attribution (see kinahan-1998-reference): the bilinear method is described by Burger et al. 2002 for the GE Discovery LS ("uses a bilinear function based on the attenuation of water and cortical bone at the CT and PET energies") and by Carney et al. 2006 ("9.6 x 10(-5) (HU + 1000) below a threshold of approximately 50 HU and a(HU + 1000) + b above the threshold, where a and b are fixed parameters that depend on the kVp setting"). Break points and slopes differ between manufacturers. Check: Carney's line gives 0.0248 per cm for the inflated-lung row (HU -742), against 0.0247 computed from NIST. Scale ratios computed from NIST XCOM: water 0.09598/0.1929 = 0.498; cortical bone 0.08938/0.2570 = 0.348. Contrast agents and metal upset the conversion because they are bright on CT for a reason (high atomic number) that matters little at 511 keV.
+
+### kinahan-1998-reference | Claim 10: key reference, Kinahan et al. 1998
+S: A 1998 paper in the journal Medical Physics by Paul Kinahan, David Townsend, Thomas Beyer and Donald Sashin showed, using CT and PET scans of test objects and of people, that a CT image can be used to correct PET data for attenuation in a combined PET/CT scanner.
+V: Kinahan PE, Townsend DW, Beyer T, Sashin D. Attenuation correction for a combined 3D PET/CT scanner. Med Phys. 1998;25(10):2046-2053. doi:10.1118/1.598392 [] R: Published October 1998; PubMed ID 9800714. The data came from separate CT and PET scanners, with the images aligned by software.
+SRC: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=9800714&rettype=abstract&retmode=text , https://jnm.snmjournals.org/content/45/1_suppl/4S.full.pdf
+N: Reference CONFIRMED (authors, journal, year, volume 25, issue 10, pages 2046-53, DOI). CORRECTION to the draft: this paper did not propose "bilinear scaling". Its abstract compares three methods, "segmentation, scaling, and our proposed hybrid segmentation/scaling method", for converting "from an effective CT photon energy of 70 keV to the PET photon energy of 511 keV"; in the hybrid method a threshold separates bone from non-bone and each gets its own scale factor (Townsend 2004). The bilinear function used on later scanners is a close relative (Burger 2002, Carney 2006). First-author affiliation in PubMed: Department of Radiology, University of Pittsburgh. The abstract calls the work a "proof of principle" and concludes "using CT information is a feasible way to obtain attenuation correction factors for 3D PET". The statement avoids the word "first": X-ray-based attenuation correction had been explored earlier for SPECT/CT, and I did not check priority.
+
+### pet-without-attenuation-correction | Claim 10: what an uncorrected PET image looks like
+S: Without attenuation correction a PET image is misleading in a recognizable way: the skin and the lungs look too bright, and the deep center of the body looks too dim.
+V: skin and lungs falsely bright; deep tissue falsely dim [] R: The error grows with body size. Doctors still look at the uncorrected images as a cross-check, because problems in the CT (metal, contrast agent, breathing mismatch) can create false bright spots in the corrected ones.
+SRC: https://jnm.snmjournals.org/content/jnumed/44/11/1855.full.pdf , https://tech.snmjournals.org/content/33/3/156 , https://pmc.ncbi.nlm.nih.gov/articles/PMC4315529/
+N: Draft confirmed. Bai, Kinahan et al. 2003 (J Nucl Med 44:1855-61): an image reconstructed without attenuation correction "illustrates the well-known artifacts of elevated tracer concentration in the lungs and skin"; in uniform regions such as the abdomen only "central regions of lower, or even negative, tracer concentration" are consistent with the uncorrected data; "The well-known disadvantages of not performing attenuation correction are the inaccuracies in the uptake, shape, and location of lesions". Reason: photon pairs from deep in the body must cross more tissue, so fewer are detected; pairs from the skin, and pairs crossing the low-density lungs, are lost less. Sureshbabu and Mawlawi 2005 (J Nucl Med Technol 33:156-61) and the EANM guideline (Boellaard 2015) describe using non-corrected images to check for CT-caused artifacts. "The error grows with body size" follows from the exponential law (see photon-pair-loss-in-the-body) and is not a quoted sentence.
+
+### photon-pair-loss-in-the-body | Claim 10: size of the attenuation effect at 511 keV
+S: A PET event is counted only if both 511 keV photons escape the body, and along a line through 30 cm of tissue only about 1 pair in 18 does, so the correction is large.
+V: 5.6 [percent of photon pairs surviving a 30 cm path in water] R: Survival for a total path in water of 10 / 20 / 30 / 40 cm: 38.3 / 14.7 / 5.62 / 2.15 percent (correction factors 2.61 / 6.82 / 17.8 / 46.5). The loss depends on the total tissue thickness along the line, not on where along the line the pair started.
+SRC: https://physics.nist.gov/PhysRefData/XrayMassCoef/ComTab/water.html , https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=12111133&rettype=abstract&retmode=text , https://jnm.snmjournals.org/content/jnumed/44/11/1855.full.pdf
+N: Computed here, not quoted: pair survival = exp(-mu x D) with mu(water, 511 keV) = 0.09597 per cm and D the total path length through the body along the line joining the two detectors (each photon survives with probability exp(-mu x its own path), and the two paths add up to D). 30 cm: exp(-0.09597 x 30) = 0.0562, that is 1 in 17.8. Real bodies are not pure water (lungs attenuate less, bone more), and 30 cm is an illustrative adult torso width. This is added background for the site text; the draft did not include a number.
+adipose.html
+air.html
+aquilion_one.html
+aquilion_one.txt
+biograph_vision.html
+biograph_vision.txt
+boellaard.html
+boellaard.txt
+bone.html
+burger2002.html
+canon_insight.html
+canon_insight.txt
+carney2006.html
+cdc205077.pdf
+cormack.txt
+cormack_lecture.pdf
+erj.html
+erj.txt
+fda_k213715.html
+fda_k213715.txt
+ge_apex_pr.html
+ge_apex_pr.txt
+hounsfield.txt
+hounsfield_lecture.pdf
+iaea_drp.pdf
+iaea_drp.txt
+jnm_37_441.pdf
+jnm_37_441.txt
+jnm_43_1054.pdf
+jnm_43_1054.txt
+jnm_44_1855.pdf
+jnm_44_1855.txt
+kinahan1998.html
+kinahan2003.html
+koetzier.html
+koetzier.txt
+lung.html
+muscle.html
+naeotom.html
+naeotom.txt
+nobel1979press.html
+nobel1979press.txt
+pickhardt.html
+pickhardt.txt
+pmc12426566.html
+pmc12426566.txt
+pmc3396587.html
+pmc3396587.txt
+pmc3859249.html
+pmc3859249.txt
+pmc4277262.html
+pmc4277262.txt
+pmc5015439.html
+pmc5015439.txt
+pmc5966206.html
+pmc5966206.txt
+pmc6160654.html
+pmc6160654.txt
+pmc7851788.html
+pmc7851788.txt
+pmc8693332.html
+pmc8693332.txt
+pmc9038617.html
+pmc9038617.txt
+pmc9816921.html
+pmc9816921.txt
+pubmed_abstracts.txt
+radiopaedia_hu.html
+radiopaedia_hu.txt
+radiopro_T2.html
+radiopro_T2.txt
+somatom_force.html
+somatom_force.txt
+statpearls_hu.html
+sureshbabu.html
+sureshbabu.txt
+tab2.html
+tissue.html
+townsend2004.pdf
+townsend2004.txt
+water.html
+willemink.html
+willemink.txt
+xcom_adipose.html
+xcom_air.html
+xcom_bone.html
+xcom_form.html
+xcom_h2o.html
+xcom_lung.html
+xcom_mixform.html
+xcom_muscle.html
+xcom_softtissue.html
+xcom_water.html
+xcom_water.txt

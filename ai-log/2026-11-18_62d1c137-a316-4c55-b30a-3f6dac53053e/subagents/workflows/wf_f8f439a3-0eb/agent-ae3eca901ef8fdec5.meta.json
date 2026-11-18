@@ -1,0 +1,1 @@
+{"agentType":"workflow-subagent","isBuiltIn":true,"description":"research:xray-origins","workflowPhase":"Research","spawnDepth":1,"requestShape":"foreground","requestNonInteractive":false,"model":"claude-fable-5-2","pickedEffortModel":"claude-fable-5-2","inWorkflowRun":true}
