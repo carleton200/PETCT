@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PET/CT Explorer</title>
+<meta name="description" content="How PET/CT scanners came to be, how they work, and a small game where you play an X-ray photon.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='none' stroke='%23ff9f43' stroke-width='4'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23ffe08a'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav">
+  <a class="nav__brand" href="#top">PET/CT Explorer</a>
+  <nav aria-label="Sections"><a href="#history">History</a><a href="#science">Science</a><a href="#play">Play</a></nav>
+</header>
+
+<main id="main">
+<section class="hero" id="top">
+  <canvas id="hero-canvas" aria-hidden="true"></canvas>
+  <div class="hero__text">
+    <p class="eyebrow">Positron emission tomography + computed tomography</p>
+    <h1>Seeing inside, two ways.</h1>
+    <p class="lede">A CT scanner maps the body's structure with X-rays. A PET scanner maps what the body's cells are doing, using a faintly radioactive sugar. A PET/CT scanner does both in one visit and lays the two pictures on top of each other.</p>
+    <p><a class="btn btn--primary" href="#history">Start with the history</a> <a class="btn" href="#play">Skip to the game</a></p>
+  </div>
+</section>
+
+<section class="section" id="history">
+  <header class="section__head"><span class="section__num">1</span><h2>History</h2>
+    <p>It took 105 years to get from the first X-ray to the first PET/CT scanner on sale. Pick a dot, or use the arrow keys.</p></header>
+  <div class="tl" id="timeline"><noscript>The timeline needs JavaScript.</noscript></div>
+</section>
+
+<section class="section" id="science">
+  <header class="section__head"><span class="section__num">2</span><h2>The science</h2>
+    <p>Five ideas, each with something to poke at.</p></header>
+
+  <article class="lesson">
+    <div class="prose">
+      <h3>One machine, two scanners</h3>
+      <p>From the outside a PET/CT scanner looks like one thick ring. Inside are two machines sharing a bed. At the front, an X-ray tube and a curved detector spin around you several times a second: that is the CT. Behind it sits a fixed ring of crystals that waits for light coming out of your own body: that is the PET.</p>
+      <p>The bed slides you through the CT first, which takes well under a minute, then parks you in the PET ring for the longer, quieter scan.</p>
+    </div>
+    <figure class="fig">
+      <svg viewBox="0 0 520 260" role="img" aria-label="Cutaway of a PET/CT scanner: a patient on a bed passes through a CT ring and then a PET ring.">
+        <rect x="150" y="20" width="250" height="200" rx="26" class="s-case"/>
+        <rect x="150" y="96" width="250" height="56" class="s-bore"/>
+        <g class="s-ct"><rect x="178" y="34" width="70" height="56" rx="6"/><rect x="178" y="158" width="70" height="48" rx="6"/>
+          <path d="M213 90 L196 150 L230 150 Z" class="s-beam"/></g>
+        <g class="s-pet"><rect x="290" y="40" width="86" height="50" rx="6"/><rect x="290" y="158" width="86" height="50" rx="6"/>
+          <line x1="333" y1="124" x2="318" y2="90" class="s-ray"/><line x1="333" y1="124" x2="348" y2="158" class="s-ray"/><circle cx="333" cy="124" r="4" class="s-spark"/></g>
+        <rect x="20" y="134" width="480" height="10" rx="5" class="s-bed"/>
+        <rect x="60" y="144" width="14" height="80" class="s-bed"/>
+        <ellipse cx="250" cy="122" rx="120" ry="12" class="s-body"/><circle cx="118" cy="120" r="13" class="s-body"/>
+        <text x="213" y="246" class="s-label" text-anchor="middle">CT ring: X-ray tube + detector</text>
+        <text x="345" y="16" class="s-label" text-anchor="middle">PET ring: crystals</text>
+        <text x="40" y="126" class="s-label">Bed</text>
+      </svg>
+      <figcaption><b>Figure 1.</b> The CT ring makes X-rays and catches what gets through. The PET ring makes nothing: it only listens.</figcaption>
+    </figure>
+  </article>
+
+  <article class="lesson lesson--flip">
+    <div class="prose">
+      <h3>A sugar with a tag</h3>
+      <p>Before a PET scan you are injected with a tracer. The usual one is FDG: a glucose molecule with one small group swapped for a radioactive fluorine-18 atom. Cells that burn a lot of sugar, such as many tumours, the brain and the heart, pull it in and cannot get rid of it.</p>
+      <p>Fluorine-18 does not last. Half of it decays every 110 minutes, so it has to be made in a cyclotron the same day, and by the next morning almost none is left in you.</p>
+      <p class="callout"><b>110 minutes</b> is the half-life of fluorine-18.</p>
+    </div>
+    <figure class="fig" id="fig-decay">
+      <canvas width="520" height="300" role="img" aria-label="A grid of 100 atoms that go dark as time passes."></canvas>
+      <div class="fig__controls"><label>Time since the tracer was made <input type="range" min="0" max="600" step="5" value="0" aria-label="Minutes since the tracer was made"></label>
+        <button class="btn btn--small" type="button">Jump one half-life</button></div>
+      <p class="fig__readout" aria-live="polite"></p>
+      <figcaption><b>Figure 2.</b> Each dot is a fluorine-18 atom. Drag the slider and watch them go.</figcaption>
+    </figure>
+  </article>
+
+  <article class="lesson">
+    <div class="prose">
+      <h3>Antimatter, briefly</h3>
+      <p>When a fluorine-18 nucleus decays it throws out a positron, the antimatter twin of the electron. The positron wanders less than a millimetre through your tissue before it meets an ordinary electron. The two annihilate: both vanish, and their mass becomes two photons of light.</p>
+      <p>Those two photons always carry the same energy, 511 keV each, and always leave in almost exactly opposite directions. That back-to-back pair is the signature a PET scanner hunts for.</p>
+      <p class="callout"><b>511 keV</b> is the energy of each photon: the mass of one electron, turned into light.</p>
+    </div>
+    <figure class="fig" id="fig-annihilation">
+      <canvas width="520" height="300" role="img" aria-label="Animation: a nucleus emits a positron, which wanders, meets an electron, and becomes two photons flying apart."></canvas>
+      <div class="fig__controls"><button class="btn btn--small" type="button">Replay</button></div>
+      <p class="fig__readout" aria-live="polite"></p>
+      <figcaption><b>Figure 3.</b> One decay, slowed down enormously. The real thing is over in about a billionth of a second.</figcaption>
+    </figure>
+  </article>
+
+  <article class="lesson lesson--flip">
+    <div class="prose">
+      <h3>Catching the pair</h3>
+      <p>The PET ring is thousands of small crystals that flash when a 511 keV photon hits them. When two crystals on opposite sides flash within a few billionths of a second of each other, the scanner assumes they caught one pair, and draws a line between them. The decay happened somewhere on that line.</p>
+      <p>One line says little. Millions of lines, crossing, say a great deal: they pile up where the tracer has gathered. Fire some decays and watch a hidden hot spot appear.</p>
+    </div>
+    <figure class="fig" id="fig-ring">
+      <canvas width="520" height="420" role="img" aria-label="A ring of detectors. Lines between pairs of detectors pile up to reveal a hidden hot spot."></canvas>
+      <div class="fig__controls">
+        <button class="btn btn--small" type="button" data-a="one">Fire 1</button>
+        <button class="btn btn--small" type="button" data-a="hundred">Fire 100</button>
+        <button class="btn btn--small" type="button" data-a="auto" aria-pressed="false">Auto</button>
+        <button class="btn btn--small" type="button" data-a="reveal" aria-pressed="false">Reveal source</button>
+        <button class="btn btn--small" type="button" data-a="new">New patient</button>
+      </div>
+      <p class="fig__readout" aria-live="polite"></p>
+      <figcaption><b>Figure 4.</b> Every line is one detected pair. Where the lines cross most, the tracer is.</figcaption>
+    </figure>
+  </article>
+
+  <article class="lesson">
+    <div class="prose">
+      <h3>How CT sees</h3>
+      <p>The CT half works the other way round: it shines X-rays through you and measures what comes out. Each X-ray photon either passes straight through or is stopped, absorbed or knocked off course, and which one happens is a matter of chance.</p>
+      <p>Dense material with heavy atoms stops far more photons. Bone, full of calcium, casts a strong shadow. Fat, muscle and water cast similar, weaker ones. Air casts almost none. Measure those shadows from hundreds of angles and a computer can work out a cross-section of the body.</p>
+      <p><a href="#play">Try being one of those photons.</a></p>
+    </div>
+    <figure class="fig" id="fig-atten">
+      <canvas width="520" height="300" role="img" aria-label="A beam of photons crossing a slab of material. Some stop inside; the rest reach the detector."></canvas>
+      <div class="fig__controls">
+        <span class="seg" role="group" aria-label="Material"></span>
+        <label>Thickness <input type="range" min="0" max="30" step="1" value="10" aria-label="Thickness in centimetres"></label>
+      </div>
+      <p class="fig__readout" aria-live="polite"></p>
+      <figcaption><b>Figure 5.</b> 200 photons at a typical CT energy. Values are approximate, for about 70 keV.</figcaption>
+    </figure>
+  </article>
+
+  <article class="lesson lesson--flip">
+    <div class="prose">
+      <h3>Better together</h3>
+      <p>A PET image alone is a glowing blur: it shows where sugar is being used but not exactly where in the body that is. A CT image alone shows every bone and organ in sharp detail but cannot tell a busy tumour from quiet scar tissue.</p>
+      <p>Because both scans happen on the same bed minutes apart, the two pictures line up. Laid over each other, the bright spot gets an address. The CT also tells the computer how much tissue each PET photon had to cross, so it can correct for the ones that never made it out.</p>
+    </div>
+    <figure class="fig" id="fig-fusion">
+      <canvas width="520" height="360" role="img" aria-label="A stylised slice through the chest. A slider fades between the CT picture and the PET picture."></canvas>
+      <div class="fig__controls"><label>CT <input type="range" min="0" max="100" value="50" aria-label="Blend from CT to PET"> PET</label></div>
+      <p class="fig__readout" aria-live="polite"></p>
+      <figcaption><b>Figure 6.</b> A drawn chest slice, not a real scan. Grey is the CT; the warm colours are the PET.</figcaption>
+    </figure>
+  </article>
+</section>
+
+<section class="section" id="play">
+  <header class="section__head"><span class="section__num">3</span><h2>Play: Photon Run</h2>
+    <p>You are an X-ray photon. The tube fires you in on the left; the detector is waiting on the right. Do not touch the bones.</p></header>
+  <div class="game" id="game">
+    <canvas id="game-canvas" width="960" height="540" tabindex="0" aria-label="Photon Run game"></canvas>
+    <div class="game__panel" id="game-panel"></div>
+    <button class="game__mute btn btn--small" id="game-mute" type="button" aria-pressed="false">Sound on</button>
+  </div>
+  <p class="game__help">Steer with ↑ ↓ or W S. Space starts and retries, P pauses. On a phone, touch and drag.</p>
+  <p class="game__status visually-hidden" id="game-status" aria-live="polite"></p>
+  <aside class="callout callout--wide">
+    <h3>Reality check</h3>
+    <p>Real photons cannot steer, and they do not slow down inside organs. Each one either gets through or is stopped, by chance, and bone stops far more of them than soft tissue does. That is exactly why bone shows up white on a CT image: it is where the photons went missing. The ones that reach the detector, like you, make the picture.</p>
+  </aside>
+</section>
+</main>
+
+<footer class="footer">
+  <p>Dates and figures follow standard accounts: Nobel Prize lecture notes for Röntgen, Anderson, Lawrence, Hounsfield and Cormack; published histories of PET from Washington University and Brookhaven National Laboratory; and Townsend's accounts of the first PET/CT. Attenuation values are rounded from NIST tables. All drawings on this page are original.</p>
+  <p>Built with Claude.</p>
+</footer>
+
+<script src="js/game-core.js" defer></script>
+<script src="js/timeline.js" defer></script>
+<script src="js/figures.js" defer></script>
+<script src="js/game.js" defer></script>
+</body>
+</html>

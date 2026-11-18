@@ -1,0 +1,103 @@
+:root {
+  --bg-0: #070b16; --bg-1: #0d1424; --bg-2: #141d33; --line: #25314d;
+  --ink-0: #eef2f8; --ink-1: #b9c3d6; --ink-2: #8a97b0;
+  --hot-1: #b3202a; --hot-2: #f05a28; --hot-3: #ff9f43; --hot-4: #ffd166; --hot-5: #fff3c4;
+  --cool: #5fd4e6;
+  --font: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --display: Georgia, "Iowan Old Style", "Times New Roman", serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--bg-0); color: var(--ink-1); font: 17px/1.6 var(--font); overflow-x: hidden; }
+h1, h2, h3 { font-family: var(--display); color: var(--ink-0); font-weight: 600; line-height: 1.15; margin: 0 0 .5em; }
+h1 { font-size: clamp(2.4rem, 6vw, 4.4rem); letter-spacing: -.01em; }
+h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+h3 { font-size: 1.45rem; }
+a { color: var(--hot-4); }
+a:focus-visible, button:focus-visible, input:focus-visible, canvas:focus-visible { outline: 2px solid var(--cool); outline-offset: 3px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.skip { position: absolute; left: -999px; } .skip:focus { left: 12px; top: 12px; z-index: 20; background: var(--bg-2); padding: 8px 12px; }
+
+.nav { position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 12px clamp(16px, 4vw, 40px); background: rgba(7, 11, 22, .86); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.nav__brand { font-family: var(--display); color: var(--ink-0); text-decoration: none; font-size: 1.1rem; white-space: nowrap; }
+.nav nav { display: flex; gap: clamp(10px, 3vw, 26px); }
+.nav nav a { color: var(--ink-1); text-decoration: none; font-size: .95rem; }
+.nav nav a:hover { color: var(--hot-3); }
+
+.hero { position: relative; min-height: min(86vh, 760px); display: grid; align-items: center; padding: 60px clamp(16px, 6vw, 80px); overflow: hidden; }
+#hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero__text { position: relative; max-width: 620px; }
+.eyebrow { color: var(--hot-3); text-transform: uppercase; letter-spacing: .14em; font-size: .78rem; margin: 0 0 14px; }
+.lede { font-size: 1.15rem; color: var(--ink-1); }
+
+.btn { display: inline-block; padding: 10px 18px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg-2); color: var(--ink-0);
+  font: inherit; font-size: .95rem; text-decoration: none; cursor: pointer; transition: border-color .15s, background .15s; }
+.btn:hover { border-color: var(--hot-3); }
+.btn--primary { background: var(--hot-3); border-color: var(--hot-3); color: #1b1203; font-weight: 600; }
+.btn--small { padding: 6px 13px; font-size: .85rem; }
+.btn[aria-pressed="true"] { background: var(--hot-3); border-color: var(--hot-3); color: #1b1203; }
+
+.section { max-width: 1160px; margin: 0 auto; padding: 80px clamp(16px, 4vw, 40px) 40px; }
+.section__head { max-width: 680px; margin-bottom: 34px; }
+.section__num { display: inline-grid; place-items: center; width: 34px; height: 34px; border: 1px solid var(--hot-3); border-radius: 50%; color: var(--hot-3); font-size: .9rem; margin-bottom: 12px; }
+
+/* Timeline */
+.tl__filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.tl__track { display: flex; gap: 0; overflow-x: auto; padding: 22px 4px 18px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); scrollbar-color: var(--line) transparent; }
+.tl__dot { flex: 0 0 auto; width: 104px; background: none; border: 0; color: var(--ink-2); font: inherit; cursor: pointer; padding: 0 4px; position: relative; text-align: center; }
+.tl__dot::before { content: ""; position: absolute; left: 0; right: 0; top: 37px; height: 1px; background: var(--line); }
+.tl__dot i { display: block; width: 14px; height: 14px; margin: 8px auto; border-radius: 50%; background: var(--bg-0); border: 2px solid var(--c, var(--ink-2)); position: relative; transition: transform .15s; }
+.tl__dot b { display: block; font-size: .95rem; color: var(--ink-1); }
+.tl__dot span { display: block; font-size: .72rem; line-height: 1.25; }
+.tl__dot[aria-current="true"] i { background: var(--c); transform: scale(1.5); box-shadow: 0 0 14px var(--c); }
+.tl__dot[aria-current="true"] b { color: var(--ink-0); }
+.tl__dot.is-dim { opacity: .22; }
+.tl__card { display: grid; grid-template-columns: 150px 1fr; gap: 26px; margin-top: 22px; padding: 26px; background: var(--bg-1); border: 1px solid var(--line); border-radius: 14px; min-height: 250px; }
+.tl__year { font-family: var(--display); font-size: 2.6rem; color: var(--c); line-height: 1; }
+.tl__tag { display: inline-block; margin-top: 10px; font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--c); border: 1px solid var(--c); border-radius: 999px; padding: 2px 9px; }
+.tl__who { color: var(--ink-2); font-size: .9rem; margin: -4px 0 10px; }
+.tl__why { border-left: 2px solid var(--hot-3); padding-left: 12px; color: var(--ink-0); }
+.tl__nav { display: flex; gap: 8px; margin-top: 14px; }
+
+/* Lessons and figures */
+.lesson { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(20px, 4vw, 54px); align-items: center; padding: 40px 0; border-top: 1px solid var(--line); }
+.lesson--flip .prose { order: 2; }
+.prose p { margin: 0 0 1em; }
+.callout { background: var(--bg-2); border-left: 3px solid var(--hot-3); padding: 10px 14px; border-radius: 0 8px 8px 0; color: var(--ink-0); }
+.callout--wide { max-width: 760px; margin: 30px auto 0; padding: 18px 22px; }
+.fig { margin: 0; background: var(--bg-1); border: 1px solid var(--line); border-radius: 14px; padding: 14px; min-width: 0; }
+.fig canvas, .fig svg { display: block; width: 100%; height: auto; border-radius: 8px; background: #05080f; }
+.fig__controls { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin-top: 12px; font-size: .88rem; }
+.fig__controls label { display: flex; align-items: center; gap: 8px; flex: 1 1 220px; }
+.fig__controls input[type=range] { flex: 1; accent-color: var(--hot-3); min-width: 90px; }
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.fig__readout { margin: 10px 0 0; min-height: 1.5em; color: var(--ink-0); font-variant-numeric: tabular-nums; font-size: .95rem; }
+.fig figcaption { margin-top: 8px; font-size: .85rem; color: var(--ink-2); }
+.s-case { fill: #18223b; stroke: var(--line); } .s-bore { fill: #05080f; }
+.s-ct rect { fill: #24506b; } .s-beam { fill: var(--cool); opacity: .35; }
+.s-pet rect { fill: #6b3a1c; } .s-ray { stroke: var(--hot-4); stroke-width: 2; } .s-spark { fill: var(--hot-5); }
+.s-bed { fill: #3a4767; } .s-body { fill: #c9b8a8; } .s-label { fill: var(--ink-1); font: 13px var(--font); }
+
+/* Game */
+.game { position: relative; max-width: 960px; margin: 0 auto; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: #05080f; }
+#game-canvas { display: block; width: 100%; height: auto; touch-action: none; }
+.game__panel { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 16px; background: rgba(5, 8, 15, .72); }
+.game__panel[hidden] { display: none; }
+.game__panel h3 { font-size: clamp(1.5rem, 5vw, 2.6rem); color: var(--hot-4); margin-bottom: .2em; }
+.game__panel p { margin: .3em 0; color: var(--ink-0); }
+.game__panel .stars { font-size: 2rem; color: var(--hot-4); letter-spacing: .1em; }
+.game__panel .btn { margin-top: 12px; min-height: 44px; }
+.game__mute { position: absolute; right: 10px; bottom: 10px; opacity: .85; }
+.game__help { text-align: center; color: var(--ink-2); font-size: .9rem; }
+
+.footer { max-width: 760px; margin: 60px auto 0; padding: 30px 20px 50px; border-top: 1px solid var(--line); color: var(--ink-2); font-size: .85rem; text-align: center; }
+
+@media (max-width: 800px) {
+  .lesson { grid-template-columns: 1fr; padding: 28px 0; }
+  .lesson--flip .prose { order: 0; }
+  .tl__card { grid-template-columns: 1fr; gap: 12px; padding: 18px; }
+  .tl__dot { width: 88px; }
+  .section { padding-top: 56px; }
+}

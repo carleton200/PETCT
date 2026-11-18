@@ -134,6 +134,11 @@ it ships, and lists the sources in the footer):
 
 If a fact cannot be confirmed, the event is corrected or dropped, never guessed.
 
+During planning the rows that paired two events (1913, 1930s, 1957–58, 1963) were split,
+giving 26 candidate entries. Each was researched and then re-checked by an independent
+fact-checker; the results, with sources, are in `docs/research/`. The final timeline
+keeps 20–24 of them.
+
 **Images:** public-domain or Creative Commons photos from Wikimedia Commons, saved into
 `images/` (not hot-linked), each with author, license, and source link in a visible
 "Image credits" list and in `images/CREDITS.md`. Events with no clearly licensed photo
@@ -192,15 +197,19 @@ Rules, as you gave them:
 - **Bone is the obstacle.** Touch a bone fragment and you are stuck: absorbed, run over,
   you never reach the detector.
 - **Organs slow you down a little.** Inside an organ the photon moves at about 70 % speed,
-  with a jelly wobble. Slower means a lower score, not a loss.
+  with a jelly wobble (lungs, being mostly air, slow it less). Slower means a lower score,
+  not a loss.
 - **20–40 seconds.** One fixed, hand-built level. A clean run takes about 25 seconds; a
-  run through every organ takes about 35. It cannot exceed 40.
+  run that wades through every organ takes closer to 30. The level's length and speeds
+  make it impossible for any finished run to fall outside 20–40 seconds.
 - **Reach the detector to win.**
 
 My additions, for fun (cut any you dislike):
 
-- Controls: ↑/↓ or W/S; on touch screens hold the upper or lower half. Space or tap to
-  start and to retry instantly. P or Esc pauses. The game pauses itself if you switch tabs.
+- Controls: ↑/↓ or W/S; on touch screens, touch and drag and the photon follows your
+  finger's height (changed during planning from "hold the upper or lower half", which
+  steers the wrong way when the photon is near an edge). Space or tap to start and to
+  retry instantly. P or Esc pauses. The game pauses itself if you switch tabs.
 - Whimsy: the photon has a face and a sparkle trail; bones scowl; organs jiggle and
   blush when you pass through; the detector cheers. Losing shows a one-liner ("Absorbed
   by a rib. You are now a tiny bit of warmth."), winning shows "Detected! You are one
@@ -219,23 +228,38 @@ My additions, for fun (cut any you dislike):
 
 ```
 index.html
-css/styles.css
-js/timeline-data.js     events (plain data)
-js/timeline.js          timeline behaviour
+css/base.css            design tokens, type, shared components
+css/figures.css         the shared figure frame and controls
+css/figures/*.css       one small file per figure
+css/timeline.css, css/game.css
+js/util.js              shared helpers (seeded random, visibility, safe storage)
+js/physics.js           verified constants and formulas — testable in Node
+js/phantom.js           the stylised chest slice used by figures 6–8 — testable in Node
+js/reconstruct.js       projection / back-projection maths — testable in Node
+js/timeline-data.js     events (plain data, generated from the verified research files)
+js/timeline-logic.js    timeline layout and stepping — testable in Node
+js/timeline.js, js/timeline-art.js   timeline behaviour; drawn illustrations
+js/figures/kit.js       figure lifecycle and shared controls
 js/figures/*.js         one file per interactive figure
 js/game/level.js        level layout (plain data)
 js/game/core.js         movement, collisions, win/lose, scoring — no drawing, testable in Node
 js/game/render.js       drawing, particles
 js/game/audio.js        synthesised sound
 js/game/main.js         input, game loop, screens
-js/reconstruct.js       projection / back-projection maths for figure 7 — testable in Node
+js/hero.js, js/nav.js, js/credits.js
 images/                 photos + CREDITS.md
 fonts/                  two typefaces (woff2) + their license files
 tests/                  Node unit tests
+tools/                  shot.js and smoke.js: browser checks with no packages to install
+docs/research/          verified facts, image licenses and font choices, with sources
+docs/design/            the style mock every part of the page is matched to
 README.md               what this is, how to run it, how to publish on Pages
 .gitignore              ai-log/, .claude/settings.local.json, node_modules/
 .nojekyll
 ```
+
+The detailed breakdown, with the names each file exposes, is in
+`docs/superpowers/plans/2026-11-18-petct-site.md`.
 
 ## How we know it works
 
@@ -250,13 +274,19 @@ README.md               what this is, how to run it, how to publish on Pages
   starts, a bone hit ends it, a steered run wins, and the time lands in range. Screenshots
   at laptop and phone widths get looked at, not just taken. The game exposes a small
   read-only test hook (`window.PETCT.game.state`) so a script can steer it.
-- **How the browser checks are run (my call):** through the session's Playwright browser
-  tool, against `python -m http.server` in the repo root. They are done during the build
-  and their results reported; they are not saved as re-runnable scripts (the unit tests
-  are the re-runnable part). If the session browser refuses `file://` pages, the
-  opened-from-disk check is done with headless Edge (`msedge --headless --dump-dom`),
-  and failing that by checking the rules that make it work: no `type="module"`, no
-  `fetch()` of local files, only relative asset paths.
+- **How the browser checks are run (my call, revised during planning after testing the
+  tools):** three ways.
+  1. The session's Playwright browser tool, against `python -m http.server` in the repo
+     root, for the walkthroughs. It is one shared window and it refuses `file://` pages
+     (confirmed), so only one check runs in it at a time.
+  2. `tools/shot.js`, a small helper that drives a private headless Chrome (the one
+     already installed; no packages). It opens a page from disk or a server, clicks,
+     presses keys, takes screenshots and reports console errors. Each builder uses its
+     own copy of the browser, so parallel work can be checked in parallel.
+  3. `tools/smoke.js`, a re-runnable end-to-end check built on the same helper: no
+     console errors, all nine figures respond, the timeline steps and filters, nothing
+     overflows on a phone, the game starts, pauses, ends on bone, and a scripted player
+     wins in 20–40 seconds. It runs against the page opened from disk and from a server.
 
 ## Publishing
 
